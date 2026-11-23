@@ -8,4 +8,4 @@ COPY SRC/ ./SRC/
 WORKDIR /app/SRC
 ENV RAICES_ENV=production PROXY_SALTOS=1 PORT=8080
 # Cloud Run envía las peticiones al puerto de $PORT. 2 hilos bastan para el tráfico esperado.
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 4 --timeout 60 "app:create_app()"
+CMD flask --app app init-db && exec gunicorn --bind :$PORT --workers 1 --threads 4 --timeout 60 "app:create_app()"
