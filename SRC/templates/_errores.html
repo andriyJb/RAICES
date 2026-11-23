@@ -1,0 +1,7 @@
+{% macro errores(lista) %}
+{% if lista %}
+<div class="alerta" role="alert">
+  <ul>{% for e in lista %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+{% endmacro %}

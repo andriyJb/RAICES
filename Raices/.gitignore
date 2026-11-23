@@ -1,0 +1,12 @@
+.env
+*.db
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+instance/
+# Audios y datos lingüísticos con permisos pendientes: no se versionan
+SRC/static/audio/
+datos_privados/
+audios/

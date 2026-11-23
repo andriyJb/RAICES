@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Acerca de Raíces{% endblock %}
+
+{% block contenido %}
+<section class="contenedor pagina">
+  <h1>Acerca de Raíces</h1>
+  <p>Raíces es una aplicación web para traducir del español al mixteco. Su prioridad es ser clara sobre qué tan confiable es cada resultado.</p>
+
+  <h2>Variante de trabajo</h2>
+  <p>La primera variante es <strong>{{ variante.nombre }}</strong> ({{ variante.region }}), código <code>{{ variante.codigo }}</code>. El mixteco incluye muchas variedades que no son mutuamente inteligibles; por eso cada traducción pertenece a una variante concreta y la clasificación de esta se está confirmando con una persona hablante. La estructura permite agregar otras variantes más adelante.</p>
+
+  <h2>Cómo se ve la verificación</h2>
+  <div class="leyenda">
+    <div class="estado estado--verificada"><h3>Verificada</h3><p>Respaldada por una fuente con permiso de uso, o revisada y aprobada por una persona hablante de la variante.</p></div>
+    <div class="estado estado--automatica"><h3>Automática · sin verificar</h3><p>Propuesta generada con inteligencia artificial que aún no ha confirmado un hablante o especialista. Puede tener errores.</p></div>
+    <div class="estado estado--insuficiente"><h3>Información insuficiente</h3><p>No hay datos para proponer una traducción razonable.</p></div>
+  </div>
+  <p>Que una palabra esté verificada no hace verificada a la oración que la contiene: la verificación corresponde al texto completo que se muestra.</p>
+
+  <h2>Cómo funciona</h2>
+  <ul>
+    <li>Primero se busca el texto completo entre las traducciones verificadas.</li>
+    <li>Si no existe, se puede pedir una propuesta a un modelo de inteligencia artificial, al que se le entrega el vocabulario verificado relacionado como contexto.</li>
+    <li>Las propuestas automáticas siempre se marcan como no verificadas.</li>
+    <li>La pronunciación se ofrece solo cuando existe una grabación autorizada; no se usan voces sintéticas ni de otras variantes.</li>
+  </ul>
+
+  <h2>Contenido disponible</h2>
+  {% if total %}
+  <p>Hay <strong>{{ total }}</strong> traducci{{ 'ón verificada' if total == 1 else 'ones verificadas' }} para esta variante. Puedes consultarlas en <a href="{{ url_for('web.ejemplos') }}">Ejemplos y vocabulario</a>.</p>
+  {% else %}
+  <p>Todavía no hay traducciones verificadas para esta variante. El vocabulario se irá incorporando conforme una persona hablante lo revise.</p>
+  {% endif %}
+
+  <h2>Colaboración de hablantes</h2>
+  <p>Contamos con la posibilidad de colaborar con una persona hablante de la variante de Tezoatlán para revisar vocabulario, corregir frases, confirmar la escritura y, con su autorización, grabar pronunciaciones. Cada revisión se registra: qué se revisó, quién, cuándo y en qué variante.</p>
+  <p>Con una cuenta puedes <a href="{{ url_for('cuentas.aportar') }}">aportar palabras o frases</a>; quedan pendientes y no se muestran como verificadas hasta que una persona hablante las revise.</p>
+</section>
+{% endblock %}

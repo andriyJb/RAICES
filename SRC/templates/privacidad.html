@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Aviso de privacidad · Raíces{% endblock %}
+
+{% block contenido %}
+<section class="contenedor pagina">
+  <h1>Aviso de privacidad</h1>
+
+  <h2>Los textos que traduces</h2>
+  <ul>
+    <li>Si el texto coincide con una traducción verificada, se resuelve en nuestro servidor.</li>
+    <li>
+      {% if ia_activa %}Si no hay coincidencia, el texto que escribiste, junto con vocabulario verificado relacionado, se envía a un proveedor externo de inteligencia artificial ({{ {'anthropic': 'Anthropic', 'openai': 'OpenAI', 'gemini': 'Google Gemini'}.get(ia_proveedor, ia_proveedor) }}) para proponer una traducción.
+      {% else %}En este momento la traducción automática no está activada y tu texto no se envía a ningún proveedor externo. Si se activa, este aviso lo indicará.{% endif %}
+      El tratamiento que haga ese proveedor se rige por sus propias condiciones.
+    </li>
+    <li>No escribas datos personales ni información privada en el traductor.</li>
+    <li>Raíces no guarda los textos que traduces ni los escribe en sus registros de errores.</li>
+  </ul>
+
+  <h2>Tu cuenta</h2>
+  <ul>
+    <li>Guardamos tu nombre, correo, la contraseña cifrada (hash, nunca en texto plano) y los datos opcionales de tu perfil.</li>
+    <li>Las palabras o frases que aportes se guardan junto con tu cuenta, como pendientes de revisión.</li>
+    <li>Usamos una cookie de sesión necesaria para mantener tu inicio de sesión y proteger los formularios. No usamos cookies de publicidad.</li>
+  </ul>
+
+  <h2>Control de uso</h2>
+  <p>Para evitar abusos y gastos, limitamos la longitud del texto y las solicitudes por conexión, y llevamos un contador diario de llamadas al proveedor de IA (sin guardar su contenido). Tu dirección IP se usa solo en memoria para esos límites.</p>
+
+  <h2>Hablantes</h2>
+  <p>El nombre de una persona hablante colaboradora solo se muestra públicamente si dio su consentimiento. Los audios solo se publican con autorización para grabarlos, almacenarlos y reproducirlos.</p>
+</section>
+{% endblock %}

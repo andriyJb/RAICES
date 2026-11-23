@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_errores.html" import errores as mostrar %}
+{% block titulo %}Recuperar contraseña · Raíces{% endblock %}
+{% block contenido %}
+<div class="pagina-acceso">
+  <section class="tarjeta-acceso" aria-labelledby="t">
+    {% if paso == "solicitar" %}
+      <h1 id="t">Recupera tu contraseña</h1>
+      <p class="tarjeta-acceso__texto">Escribe tu correo y, si existe una cuenta, te enviaremos un enlace para crear una contraseña nueva.</p>
+      {{ mostrar(errores) }}
+      <form method="post" action="{{ url_for('cuentas.recuperar') }}">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div class="campo"><label for="correo">Correo electrónico</label>
+          <input class="control" type="email" id="correo" name="correo" maxlength="254" autocomplete="email" required autofocus></div>
+        <button class="boton boton--primario boton--bloque" type="submit">Enviar enlace</button>
+      </form>
+    {% elif paso == "enviado" %}
+      <h1 id="t">Revisa tu correo</h1>
+      <p>Si existe una cuenta con ese correo, enviamos un enlace que vale {{ config.MINUTOS_TOKEN_RECUPERACION }} minutos y solo puede usarse una vez. Revisa también la carpeta de spam.</p>
+    {% elif paso == "nueva" %}
+      <h1 id="t">Nueva contraseña</h1>
+      {{ mostrar(errores) }}
+      <form method="post" action="{{ url_for('cuentas.nueva_contrasena', token=token) }}">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div class="campo"><label for="nueva">Contraseña nueva</label>
+          <input class="control" type="password" id="nueva" name="nueva" minlength="8" maxlength="128" autocomplete="new-password" required autofocus>
+          <small>Mínimo 8 caracteres, con mayúscula, minúscula y número.</small></div>
+        <div class="campo"><label for="confirmar">Confirmar contraseña</label>
+          <input class="control" type="password" id="confirmar" name="confirmar" maxlength="128" autocomplete="new-password" required></div>
+        <button class="boton boton--primario boton--bloque" type="submit">Guardar contraseña</button>
+      </form>
+    {% else %}
+      <h1 id="t">Enlace no válido</h1>
+      <p>Este enlace venció o ya se usó. Puedes solicitar uno nuevo.</p>
+      <a class="boton boton--primario boton--bloque" href="{{ url_for('cuentas.recuperar') }}">Solicitar otro enlace</a>
+    {% endif %}
+    <p class="pie-acceso"><a href="{{ url_for('cuentas.login') }}">Volver a iniciar sesión</a></p>
+  </section>
+</div>
+{% endblock %}

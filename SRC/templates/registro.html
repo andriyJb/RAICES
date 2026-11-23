@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_errores.html" import errores as mostrar %}
+{% block titulo %}Crear cuenta · Raíces{% endblock %}
+{% block contenido %}
+<div class="pagina-acceso">
+  <section class="tarjeta-acceso" aria-labelledby="t">
+    <h1 id="t">Crea tu cuenta</h1>
+    <p class="tarjeta-acceso__texto">Para aportar palabras y administrar tus datos. Traducir no requiere cuenta.</p>
+    {{ mostrar(errores) }}
+    <form method="post" action="{{ url_for('cuentas.registro') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="campo"><label for="nombre">Nombre completo</label>
+        <input class="control" id="nombre" name="nombre" value="{{ form.nombre or '' }}" maxlength="80" autocomplete="name" required autofocus></div>
+      <div class="campo"><label for="correo">Correo electrónico</label>
+        <input class="control" type="email" id="correo" name="correo" value="{{ form.correo or '' }}" maxlength="254" autocomplete="email" required></div>
+      <div class="campo"><label for="contrasena">Contraseña</label>
+        <input class="control" type="password" id="contrasena" name="contrasena" minlength="8" maxlength="128" autocomplete="new-password" required>
+        <small>Mínimo 8 caracteres, con mayúscula, minúscula y número.</small></div>
+      <div class="campo"><label for="confirmar">Confirmar contraseña</label>
+        <input class="control" type="password" id="confirmar" name="confirmar" maxlength="128" autocomplete="new-password" required></div>
+      <button class="boton boton--primario boton--bloque" type="submit">Crear cuenta</button>
+    </form>
+    <p class="pie-acceso">¿Ya tienes cuenta? <a href="{{ url_for('cuentas.login') }}">Inicia sesión</a></p>
+  </section>
+</div>
+{% endblock %}

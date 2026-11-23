@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_errores.html" import errores as mostrar %}
+{% block titulo %}Iniciar sesión · Raíces{% endblock %}
+{% block contenido %}
+<div class="pagina-acceso">
+  <section class="tarjeta-acceso" aria-labelledby="t">
+    <h1 id="t">Inicia sesión</h1>
+    <p class="tarjeta-acceso__texto">Accede a tu cuenta de Raíces.</p>
+    {{ mostrar(errores) }}
+    <form method="post" action="{{ url_for('cuentas.login') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="campo"><label for="correo">Correo electrónico</label>
+        <input class="control" type="email" id="correo" name="correo" value="{{ form.correo or '' }}" maxlength="254" autocomplete="email" required autofocus></div>
+      <div class="campo"><label for="contrasena">Contraseña</label>
+        <input class="control" type="password" id="contrasena" name="contrasena" maxlength="128" autocomplete="current-password" required></div>
+      <div class="fila-opciones">
+        <label class="casilla"><input type="checkbox" name="recordar" value="1"> Recordar mi sesión</label>
+        <a href="{{ url_for('cuentas.recuperar') }}">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button class="boton boton--primario boton--bloque" type="submit">Continuar</button>
+    </form>
+    <p class="pie-acceso">¿Eres nuevo? <a href="{{ url_for('cuentas.registro') }}">Crea tu cuenta</a></p>
+  </section>
+</div>
+{% endblock %}

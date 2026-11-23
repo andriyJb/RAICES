@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_errores.html" import errores as mostrar %}
+{% block titulo %}Aportar una palabra · Raíces{% endblock %}
+{% block contenido %}
+<div class="pagina-acceso">
+  <section class="tarjeta-acceso" aria-labelledby="t">
+    <h1 id="t">Aportar una palabra o frase</h1>
+    <p class="tarjeta-acceso__texto">Variante: {{ variante.nombre }} ({{ variante.codigo }}). Tu aporte quedará <strong>pendiente</strong> hasta que una persona hablante lo revise; mientras tanto no se muestra como verificado.</p>
+    {{ mostrar(errores) }}
+    <form method="post" action="{{ url_for('cuentas.aportar') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="campo"><label for="espanol">En español</label>
+        <input class="control" id="espanol" name="espanol" value="{{ form.espanol or '' }}" maxlength="200" required autofocus></div>
+      <div class="campo"><label for="mixteco">En mixteco</label>
+        <input class="control" id="mixteco" name="mixteco" value="{{ form.mixteco or '' }}" maxlength="300" lang="{{ variante.codigo }}" required>
+        <small>Escribe solo lo que sepas con certeza.</small></div>
+      <button class="boton boton--primario boton--bloque" type="submit">Enviar aporte</button>
+    </form>
+    <p class="pie-acceso"><a href="{{ url_for('cuentas.cuenta') }}">Volver a mi cuenta</a></p>
+  </section>
+</div>
+{% endblock %}

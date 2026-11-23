@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_errores.html" import errores as mostrar %}
+{% block titulo %}Mi cuenta · Raíces{% endblock %}
+{% block contenido %}
+<div class="contenedor cuenta">
+  <header>
+    <h1>Mi cuenta</h1>
+    <p>{{ u.correo }} · <span class="etiqueta-rol">{{ 'Hablante' if u.rol == 'hablante' else 'Usuario' }}</span></p>
+  </header>
+
+  <section class="panel" aria-labelledby="datos">
+    <h2 id="datos">Mis datos</h2>
+    {{ mostrar(errores) }}
+    <form method="post" action="{{ url_for('cuentas.cuenta_guardar') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="rejilla-campos">
+        <div class="campo"><label for="nombre">Nombre completo</label>
+          <input class="control" id="nombre" name="nombre" value="{{ form.nombre }}" maxlength="80" required></div>
+        <div class="campo"><label for="pronombres">Pronombres (opcional)</label>
+          <input class="control" id="pronombres" name="pronombres" value="{{ form.pronombres }}" maxlength="30"></div>
+      </div>
+      <div class="campo"><label for="biografia">Sobre ti (opcional)</label>
+        <textarea class="control" id="biografia" name="biografia" rows="3" maxlength="300">{{ form.biografia }}</textarea></div>
+      <div class="rejilla-campos">
+        {% for campo, etiqueta, ejemplo, patron in redes %}
+        <div class="campo"><label for="{{ campo }}">{{ etiqueta }} (opcional)</label>
+          <input class="control" type="url" id="{{ campo }}" name="{{ campo }}" value="{{ form[campo] }}" placeholder="{{ ejemplo }}" pattern="{{ patron }}" maxlength="255"></div>
+        {% endfor %}
+      </div>
+      <button class="boton boton--primario" type="submit">Guardar cambios</button>
+    </form>
+  </section>
+
+  <section class="panel" aria-labelledby="clave">
+    <h2 id="clave">Cambiar contraseña</h2>
+    {{ mostrar(errores_clave) }}
+    <form method="post" action="{{ url_for('cuentas.cambiar_contrasena') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="rejilla-campos">
+        <div class="campo"><label for="actual">Contraseña actual</label>
+          <input class="control" type="password" id="actual" name="actual" maxlength="128" autocomplete="current-password" required></div>
+        <div class="campo"><label for="nueva">Contraseña nueva</label>
+          <input class="control" type="password" id="nueva" name="nueva" minlength="8" maxlength="128" autocomplete="new-password" required></div>
+        <div class="campo"><label for="confirmar">Confirmar contraseña nueva</label>
+          <input class="control" type="password" id="confirmar" name="confirmar" maxlength="128" autocomplete="new-password" required></div>
+      </div>
+      <button class="boton boton--primario" type="submit">Actualizar contraseña</button>
+    </form>
+  </section>
+
+  <section class="panel" aria-labelledby="aportes">
+    <h2 id="aportes">Mis aportes</h2>
+    {% if aportes %}
+    <ul class="lista-aportes">
+      {% for a in aportes %}
+      <li><span>{{ a.es }} → <span lang="mxb">{{ a.mixteco }}</span></span>
+        <span class="insignia insignia--{{ a.estado }}">{{ {'pendiente': 'Pendiente de revisión', 'verificada': 'Verificada', 'rechazada': 'Rechazada'}.get(a.estado, a.estado) }}</span></li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Aún no has aportado palabras.</p>
+    {% endif %}
+    <p><a class="boton boton--secundario" href="{{ url_for('cuentas.aportar') }}">Aportar una palabra o frase</a></p>
+  </section>
+</div>
+{% endblock %}

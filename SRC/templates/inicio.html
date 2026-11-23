@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<section class="hero contenedor">
+  <h1>Del español al mixteco</h1>
+  <p class="hero__texto">
+    Escribe una palabra, frase u oración. Cada resultado indica si la traducción está
+    <strong>verificada</strong> por un hablante o una fuente, si es una <strong>propuesta automática</strong>
+    sin verificar, o si todavía no hay <strong>información suficiente</strong>.
+  </p>
+</section>
+
+<section class="contenedor">
+  <div class="traductor" id="traductor"
+       data-url="{{ url_for('web.traducir') }}"
+       data-max="{{ max_caracteres }}"
+       data-csrf="{{ csrf }}"
+       data-variante="{{ variante.codigo }}"
+       data-variante-nombre="{{ variante.nombre }}">
+
+    <div class="traductor__idiomas" aria-label="Idiomas de la traducción">
+      <span class="idioma">Español</span>
+      <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span class="idioma idioma--destino">Mixteco · {{ variante.nombre }} <small>({{ variante.codigo }})</small></span>
+    </div>
+
+    <form id="form-traductor" novalidate>
+      <label class="oculto-visual" for="texto">Texto en español</label>
+      <textarea id="texto" name="texto" rows="4" maxlength="{{ max_caracteres }}"
+                placeholder="Escribe aquí en español…" autocomplete="off" required></textarea>
+      <div class="traductor__pie">
+        <span id="contador" class="contador">0 / {{ max_caracteres }}</span>
+        <button type="submit" class="boton boton--primario" id="boton-traducir">Traducir</button>
+      </div>
+    </form>
+
+    <div id="resultado" class="resultado" aria-live="polite" hidden></div>
+    <noscript><p class="aviso">Esta página necesita JavaScript para traducir.</p></noscript>
+
+    <p class="nota-privacidad">
+      {% if ia_activa %}Si no hay traducción verificada, el texto se envía a un servicio externo de inteligencia artificial para proponer una.
+      {% else %}La traducción automática no está activada en este servidor: solo se muestran traducciones verificadas.{% endif %}
+      <a href="{{ url_for('web.privacidad') }}">Más información</a>.
+    </p>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/audio.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/traductor.js') }}" defer></script>
+{% endblock %}

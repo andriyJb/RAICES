@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titulo %}Error {{ codigo }} · Raíces{% endblock %}
+
+{% block contenido %}
+<section class="contenedor pagina pagina--centro">
+  <p class="hero__etiqueta">Error {{ codigo }}</p>
+  <h1>{{ mensaje }}</h1>
+  <p><a class="boton boton--primario" href="{{ url_for('web.inicio') }}">Volver al traductor</a></p>
+</section>
+{% endblock %}

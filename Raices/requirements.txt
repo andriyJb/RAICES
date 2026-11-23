@@ -1,0 +1,12 @@
+Flask>=3.1,<4
+Flask-SQLAlchemy>=3.1,<4
+Flask-Migrate>=4.0,<5          # migraciones controladas (flask db ...)
+SQLAlchemy>=2.0,<3
+PyMySQL>=1.1,<2
+cryptography>=42               # necesario para que PyMySQL se conecte a MySQL 8
+requests>=2.32,<3              # conexión con los proveedores de IA
+python-dotenv>=1.0,<2
+gunicorn>=22                   # servidor de producción (Cloud Run / Docker)
+
+# Solo desarrollo / pruebas
+pytest>=8

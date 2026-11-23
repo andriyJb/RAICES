@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block titulo %}Ejemplos y vocabulario · Raíces{% endblock %}
+
+{% block contenido %}
+<section class="contenedor pagina">
+  <h1>Ejemplos y vocabulario</h1>
+  <p>Vocabulario verificado de <strong>{{ variante.nombre }}</strong> ({{ variante.codigo }}). Aquí solo aparece contenido revisado por una persona hablante o respaldado por una fuente con permiso de uso.</p>
+
+  {% if not hay_contenido %}
+  <div class="estado-vacio">
+    <h2>Aún no hay vocabulario verificado disponible para esta variante</h2>
+    <p>Cuando una persona hablante revise y apruebe palabras, frases y ejemplos, aparecerán aquí con su procedencia.</p>
+    {% if usuario %}<p><a class="boton boton--secundario" href="{{ url_for('cuentas.aportar') }}">Aportar una palabra</a></p>{% endif %}
+  </div>
+  {% else %}
+  <form class="filtros" method="get" action="{{ url_for('web.ejemplos') }}">
+    <div class="campo">
+      <label for="q">Buscar en español</label>
+      <input class="control" type="search" id="q" name="q" value="{{ filtros.q }}" maxlength="80">
+    </div>
+    <div class="campo">
+      <label for="categoria">Categoría</label>
+      <select class="control" id="categoria" name="categoria">
+        <option value="">Todas</option>
+        {% for clave, nombre, n in categorias %}<option value="{{ clave }}"{% if clave == filtros.categoria %} selected{% endif %}>{{ nombre }} ({{ n }})</option>{% endfor %}
+      </select>
+    </div>
+    <div class="campo">
+      <label for="tipo">Tipo</label>
+      <select class="control" id="tipo" name="tipo">
+        <option value="">Todos</option>
+        {% for clave, nombre in tipos.items() %}<option value="{{ clave }}"{% if clave == filtros.tipo %} selected{% endif %}>{{ nombre }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="boton boton--primario" type="submit">Filtrar</button>
+  </form>
+
+  {% if entradas %}
+  <p aria-live="polite">{{ total }} resultado{{ '' if total == 1 else 's' }}.</p>
+  <div class="entradas">
+    {% for e in entradas %}
+    <article class="entrada">
+      <p class="entrada__es">{{ e.es }}</p>
+      <p class="entrada__mixteco" lang="{{ variante.codigo }}">{{ e.mixteco }}</p>
+      <div class="entrada__meta">
+        <span class="insignia insignia--verificada">Verificada</span>
+        {% if e.categoria %}<span>{{ e.categoria }}</span>{% endif %}
+        {% if e.tipo %}<span>{{ tipos.get(e.tipo, e.tipo) }}</span>{% endif %}
+        {% if e.procedencia %}<span>{{ e.procedencia }}</span>{% endif %}
+        {% if e.audio_id %}<button class="boton-audio" type="button" data-audio="{{ url_for('web.audio', audio_id=e.audio_id) }}" aria-label="Escuchar la pronunciación de {{ e.es }}">▶ Escuchar</button>{% endif %}
+      </div>
+      {% if e.ejemplos %}
+      <ul class="entrada__ejemplos">
+        {% for x in e.ejemplos %}<li>{{ x.es }} — <span lang="{{ variante.codigo }}">{{ x.mixteco }}</span></li>{% endfor %}
+      </ul>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% if paginas > 1 %}
+  <nav class="paginacion" aria-label="Páginas">
+    {% if pagina > 1 %}<a class="boton boton--secundario" href="{{ url_for('web.ejemplos', pagina=pagina-1, **filtros_url) }}">← Anterior</a>{% endif %}
+    <span>Página {{ pagina }} de {{ paginas }}</span>
+    {% if pagina < paginas %}<a class="boton boton--secundario" href="{{ url_for('web.ejemplos', pagina=pagina+1, **filtros_url) }}">Siguiente →</a>{% endif %}
+  </nav>
+  {% endif %}
+  {% else %}
+  <div class="estado-vacio">
+    <h2>No encontramos resultados con esos filtros</h2>
+    <p><a href="{{ url_for('web.ejemplos') }}">Quitar filtros</a></p>
+  </div>
+  {% endif %}
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='js/audio.js') }}" defer></script>{% endblock %}
