@@ -9,7 +9,7 @@
 --   audios: índice ix_audio_traduccion · traducciones: origen permite 'usuario' y nueva restricción de IA
 --
 -- Orden:  1) haz una copia (mysqldump)  2) flask --app app init-db  3) ejecuta este archivo  4) flask --app app revisar-bd
---   mysql -u USUARIO -p raices < docs/mysql/migracion_desde_v1.sql
+--   mysql -u USUARIO -p raices < database/migracion_desde_v1.sql
 -- =====================================================================
 SET NAMES utf8mb4;
 

@@ -1,5 +1,7 @@
 
 .env
+RAICES/.env
 .venv/
+RAICES/.venv/
 __pycache__/
 *.db

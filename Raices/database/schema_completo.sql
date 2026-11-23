@@ -5,7 +5,7 @@
 --   Uso (consola de MySQL):
 --     CREATE DATABASE raices CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 --     USE raices;
---     SOURCE C:/ruta/al/proyecto/docs/mysql/schema_completo.sql;
+--     SOURCE C:/ruta/al/proyecto/database/schema_completo.sql;
 --
 -- No inserta vocabulario ni traducciones: solo la variante inicial (la misma que crea `flask init-db`).
 -- Si ya tienes tablas de una versión anterior, NO uses este archivo: usa migracion_desde_v1.sql.

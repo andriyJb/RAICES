@@ -1,0 +1,5 @@
+{
+    "python.terminal.useEnvFile": true,
+    "python.testing.pytestArgs": ["tests"],
+    "python.testing.pytestEnabled": true
+}

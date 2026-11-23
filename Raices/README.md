@@ -13,24 +13,27 @@ pendiente de confirmar con la persona hablante. Cada traducción lleva una de tr
 - **Audio**: solo se ofrece si hay una grabación aprobada y autorizada (`/audio/<id>`). Ver `docs/audio.md`.
 - **Aviso de privacidad** y límites de uso (texto, solicitudes por IP, intentos de login, tope diario de IA).
 
-## Estructura
+## Estructura (todo cuelga de una sola carpeta raíz)
 ```
-Raices/
-├── SRC/
-│   ├── app.py            Crea la app, CSRF global, errores, comandos (init-db, asignar-rol)
-│   ├── config.py         Configuración (lee .env)
-│   ├── models.py         Tablas (usuarios, variantes, traducciones, fuentes, validaciones, audios…)
-│   ├── rutas.py          Páginas públicas, /api/traducir y /audio/<id>
-│   ├── cuentas.py        Registro, login, cuenta, aportes, recuperación
-│   ├── seguridad.py      Límites, CSRF y cabeceras
-│   ├── servicios/        repositorio.py (TODO el SQL) · traductor.py · ia.py · filtro.py
-│   │                     validacion.py · texto.py · correo.py · tipos.py
-│   ├── templates/ · static/
-├── tests/                pytest (con repositorio en memoria + test_bd.py con SQLAlchemy real)
-├── scripts/comparar_modelos.py   Compara proveedores de IA con los mismos textos
-├── docs/                 auditoria · despliegue_google_cloud · audio · plan_pruebas_ia · proceso_validacion
-├── Dockerfile · requirements.txt · .env.example
+RAICES/                      ← abre ESTA carpeta en VS Code
+├── .env                     tus claves (lo creas tú desde .env.example; NO se sube a Git)
+├── .env.example             plantilla con todas las variables
+├── requirements.txt · pytest.ini · Dockerfile · .gitignore · .dockerignore
+├── SRC/                     la aplicación
+│   ├── app.py               arranque, CSRF, errores, comandos (init-db, revisar-bd, asignar-rol)
+│   ├── config.py · models.py · extensions.py · seguridad.py
+│   ├── rutas.py             páginas públicas, /api/traducir, /audio/<id>
+│   ├── cuentas.py           registro, login, cuenta, aportes, recuperación
+│   ├── servicios/           repositorio.py (todo el SQL) · traductor.py · ia.py · filtro.py
+│   │                        esquema.py · validacion.py · texto.py · correo.py · tipos.py
+│   ├── templates/           páginas HTML
+│   └── static/              css · js · img
+├── database/                schema_completo.sql · migracion_desde_v1.sql · LEEME.md
+├── scripts/                 probar_gemini.py · comparar_modelos.py
+├── tests/                   pruebas automáticas (pytest)
+└── docs/                    auditoría · audio · Google Cloud · plan de pruebas · validación
 ```
+Archivos que se crean solos y NO se suben a Git: `.venv/`, `raices_dev.db` (SQLite de desarrollo), `__pycache__/`.
 
 ## Guía rápida para Windows + Visual Studio Code
 Los pasos 1–5 y 8 son los habituales; el flujo de traducción con Gemini **no se ha probado con una llamada real** hasta que tú
@@ -81,9 +84,9 @@ Ocurre cuando la base MySQL se creó con una versión anterior del proyecto: `in
    DROP DATABASE raices;
    CREATE DATABASE raices CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
-   y luego `flask --app app init-db` (o `SOURCE docs/mysql/schema_completo.sql;` dentro de `USE raices;`).
+   y luego `flask --app app init-db` (o `SOURCE database/schema_completo.sql;` dentro de `USE raices;`).
 3. **Si hay datos que conservar:** haz copia (`mysqldump -u USUARIO -p raices > respaldo.sql`), ejecuta `flask --app app init-db` y después
-   `mysql -u USUARIO -p raices < docs/mysql/migracion_desde_v1.sql` (repetible, no borra nada).
+   `mysql -u USUARIO -p raices < database/migracion_desde_v1.sql` (repetible, no borra nada).
 4. Verifica: `flask --app app revisar-bd` debe decir que coincide.
 
 ### MySQL (opcional)
